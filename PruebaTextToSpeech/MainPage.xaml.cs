@@ -77,44 +77,42 @@ namespace PruebaTextToSpeech
                     PrimaryButtonText= "Sí",
                     CloseButtonText = "No"
                 };
-
             ContentDialogResult result=await noWifiDialog.ShowAsync();
-
-            try
-            {
-                await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-speech"));
-                //await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-microphone")); quizás pueda servir
-                // Request access to the audio capture device.
-                MediaCaptureInitializationSettings settings = new MediaCaptureInitializationSettings();
-                settings.StreamingCaptureMode = StreamingCaptureMode.Audio;
-                settings.MediaCategory = MediaCategory.Speech;
-                MediaCapture capture = new MediaCapture();
-
-                await capture.InitializeAsync(settings);
-            }
-            catch (TypeLoadException)
-            {
-                // Thrown when a media player is not available.
-                var messageDialog = new Windows.UI.Popups.MessageDialog("Media player components are unavailable.");
-                await messageDialog.ShowAsync();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                // Thrown when permission to use the audio capture device is denied.
-                // If this occurs, show an error or disable recognition functionality.
-
-            }
-            catch (Exception exception)
-            {
-                // Thrown when an audio capture device is not present.
-                if (exception.HResult == NoCaptureDevicesHResult)
+            if (result == ContentDialogResult.Primary) {
+                try
                 {
-                    var messageDialog = new Windows.UI.Popups.MessageDialog("No Audio Capture devices are present on this system.");
+                    await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-speech"));
+                    //await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-microphone")); quizás pueda servir
+                    MediaCaptureInitializationSettings settings = new MediaCaptureInitializationSettings();
+                    settings.StreamingCaptureMode = StreamingCaptureMode.Audio;
+                    settings.MediaCategory = MediaCategory.Speech;
+                    MediaCapture capture = new MediaCapture();
+                    await capture.InitializeAsync(settings);
+                }
+                catch (TypeLoadException)
+                {
+                    // Thrown when a media player is not available.
+                    var messageDialog = new Windows.UI.Popups.MessageDialog("Media player components are unavailable.");
                     await messageDialog.ShowAsync();
                 }
-                else
+                catch (UnauthorizedAccessException)
                 {
-                    throw;
+                    // Thrown when permission to use the audio capture device is denied.
+                    // If this occurs, show an error or disable recognition functionality.
+
+                }
+                catch (Exception exception)
+                {
+                    // Thrown when an audio capture device is not present.
+                    if (exception.HResult == NoCaptureDevicesHResult)
+                    {
+                        var messageDialog = new Windows.UI.Popups.MessageDialog("No Audio Capture devices are present on this system.");
+                        await messageDialog.ShowAsync();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
         }
