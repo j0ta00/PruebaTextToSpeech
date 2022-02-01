@@ -12,8 +12,8 @@
         <TextBox x:Name="txtBox" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Text="AAAA">
             
         </TextBox>
-        <Button RelativePanel.Below="txtBox" Click="Button_Click" RelativePanel.AlignHorizontalCenterWithPanel="True" Margin="20">HOLA</Button>
-
+        <Button x:Name="btn" RelativePanel.Below="txtBox" Click="Button_Click" RelativePanel.AlignHorizontalCenterWithPanel="True" Margin="20">HOLA</Button>
+        <Button RelativePanel.Below="btn" Click="Button_Click2" RelativePanel.AlignHorizontalCenterWithPanel="True" Margin="20">habla</Button>
     </RelativePanel>
   
 </Page>
